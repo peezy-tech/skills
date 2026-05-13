@@ -14,6 +14,7 @@ Use this skill for `runner = "code-mode"` flow steps.
 - The snippet runs through raw `thread/codeMode/execute`.
 - The snippet must call `result(...)` once; the runner converts it to `FLOW_RESULT`.
 - Code Mode execution should be feature-flagged by the runtime or backend, not isolated on a separate branch.
+- Prefer `CODEX_FLOWS_MODE=code-mode` when the environment should both enable Code Mode flow steps and select the Peezy Codex fork package. The older `CODEX_FLOWS_ENABLE_CODE_MODE=1` only gates Code Mode runner availability.
 
 ## Available Shape
 
@@ -40,6 +41,6 @@ result({
 - Use `text(...)` for concise progress and collected context.
 - Preserve external recovery state on conflicts or partial integrations, then return `needs_intervention`.
 - Do not assume generated client types include fork-only methods. The runner can call raw `thread/codeMode/execute`.
-- Keep the same flow package usable from `main`; use runtime/backend flags such as `CODEX_FLOWS_ENABLE_CODE_MODE=1` for Code Mode availability.
+- Keep the same flow package usable from `main`; use runtime/backend flags such as `CODEX_FLOWS_MODE=code-mode` for Code Mode availability and fork selection.
 - Avoid global installs unless the flow package explicitly requires them.
 - Keep project-specific release/remotes policy in flow README or referenced guidance skills.
