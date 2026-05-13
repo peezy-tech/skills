@@ -9,6 +9,10 @@ metadata for Codex to load each skill without extra setup.
 
 | Skill | Use When |
 | --- | --- |
+| [`bun-flow-author`](./skills/bun-flow-author/SKILL.md) | Writing or reviewing Bun-based flow step scripts that read flow context from stdin and emit `FLOW_RESULT`. |
+| [`code-mode-flow-author`](./skills/code-mode-flow-author/SKILL.md) | Writing or reviewing Code Mode flow snippets that execute through `thread/codeMode/execute`. |
+| [`flow-backend-author`](./skills/flow-backend-author/SKILL.md) | Designing or implementing flow backend adapters, run state, idempotent dispatch, retries, and worker/app-server handoff. |
+| [`flow-package-author`](./skills/flow-package-author/SKILL.md) | Creating or updating portable flow bundles with `flow.toml`, schemas, exec snippets, fixtures, and result contracts. |
 | [`jojo-development-flow`](./skills/jojo-development-flow/SKILL.md) | Working on `peezy-tech/codex-flows` remotes, jojo.build operations, Codeberg mirroring, jojo Actions, branch tracking, release validation, or npm trusted publishing. |
 
 ## Layout
