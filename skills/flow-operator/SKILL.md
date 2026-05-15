@@ -36,10 +36,6 @@ curl -X POST -H "Authorization: Bearer $PATCH_ADMIN_TOKEN" https://patch.moi/flo
 curl -X POST -H "Authorization: Bearer $PATCH_ADMIN_TOKEN" https://patch.moi/flow-events/<encoded-event-id>/replay
 ```
 
-During the migration window, the legacy `PATCHBAY_ADMIN_TOKEN` value and
-`https://patchbay.peezy.tech` host may still work. Prefer `PATCH_ADMIN_TOKEN`
-and `https://patch.moi` for new operations.
-
 ## Rules
 
 - Treat duplicate dispatch and replay differently. Duplicate dispatch should not start a new run; replay intentionally starts a new run attempt for a stored event.
