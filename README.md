@@ -11,6 +11,7 @@ metadata for Codex to load each skill without extra setup.
 | --- | --- |
 | [`bun-flow-author`](./skills/bun-flow-author/SKILL.md) | Writing or reviewing Bun-based flow step scripts that read flow context from stdin and emit `FLOW_RESULT`. |
 | [`code-mode-flow-author`](./skills/code-mode-flow-author/SKILL.md) | Writing or reviewing Code Mode flow snippets that execute through `thread/codeMode/execute`. |
+| [`delegation-orchestrator`](./skills/delegation-orchestrator/SKILL.md) | Coordinating delegated Codex threads from the main workspace operator using `codex_workspace` tools. |
 | [`flow-backend-author`](./skills/flow-backend-author/SKILL.md) | Designing or implementing flow backend adapters, run state, idempotent dispatch, retries, and worker/app-server handoff. |
 | [`flow-operator`](./skills/flow-operator/SKILL.md) | Operating, inspecting, debugging, retrying, or replaying Codex flow events and runs in live or local backends. |
 | [`flow-package-author`](./skills/flow-package-author/SKILL.md) | Creating or updating portable flow bundles with `flow.toml`, schemas, exec snippets, fixtures, and result contracts. |
