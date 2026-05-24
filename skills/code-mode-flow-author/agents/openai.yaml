@@ -1,4 +1,0 @@
-interface:
-  display_name: "Code Mode Flow Author"
-  short_description: "Write Code Mode flow snippets for thread/codeMode/execute."
-  default_prompt: "Author a Code Mode runner flow step that uses injected flow context, tools.exec_command, concise progress text, intervention-safe failure handling, and result(value)."

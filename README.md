@@ -1,42 +1,83 @@
-# peezy-tech skills
+# peezy-tech Codex marketplace
 
-Shared Codex skills for peezy-tech development workflows.
+Shared Codex plugin marketplace for Peezy projects.
 
-This repo is intentionally small: one catalog, one folder per skill, and enough
-metadata for Codex to load each skill without extra setup.
+This repo is the single marketplace that people add to Codex App. Product repos
+still own their source plugin and skill definitions; this repo publishes the
+installable marketplace surface.
 
-## Available Skills
+## Install
 
-| Skill | Use When |
-| --- | --- |
-| [`bun-flow-author`](./skills/bun-flow-author/SKILL.md) | Writing or reviewing Bun-based flow step scripts that read flow context from stdin and emit `FLOW_RESULT`. |
-| [`code-mode-flow-author`](./skills/code-mode-flow-author/SKILL.md) | Writing or reviewing Code Mode flow snippets that execute through `thread/codeMode/execute`. |
-| [`delegation-orchestrator`](./skills/delegation-orchestrator/SKILL.md) | Coordinating delegated Codex threads from the main workspace operator using `codex_workspace` tools. |
-| [`flow-backend-author`](./skills/flow-backend-author/SKILL.md) | Designing or implementing flow backend adapters, run state, idempotent dispatch, retries, and worker/app-server handoff. |
-| [`flow-operator`](./skills/flow-operator/SKILL.md) | Operating, inspecting, debugging, retrying, or replaying Codex flow events and runs in live or local backends. |
-| [`flow-package-author`](./skills/flow-package-author/SKILL.md) | Creating or updating portable flow bundles with `flow.toml`, schemas, exec snippets, fixtures, and result contracts. |
-| [`jojo-development-flow`](./skills/jojo-development-flow/SKILL.md) | Working on `peezy-tech/codex-flows` remotes, jojo.build operations, Codeberg mirroring, jojo Actions, branch tracking, release validation, or npm trusted publishing. |
+From Codex App, add this marketplace:
+
+```bash
+codex plugin marketplace add peezy-tech/skills --ref main
+```
+
+Then install the plugin for the job:
+
+```bash
+codex plugin add codex-flows-remote-control@peezy-tech
+codex plugin add codex-flows-local-workspace@peezy-tech
+codex plugin add patch-moi@peezy-tech
+codex plugin add jojo-development-flow@peezy-tech
+```
+
+## Marketplace Contents
+
+| Plugin | Source | Purpose |
+| --- | --- | --- |
+| `codex-flows` | synced from `../codex-flows` | Full compatibility install for codex-flows skills and hooks. |
+| `codex-flows-author` | synced from `../codex-flows` | Flow package and Bun step authoring. |
+| `codex-flows-backend-author` | synced from `../codex-flows` | Flow backend design and implementation. |
+| `codex-flows-local-workspace` | synced from `../codex-flows` | Local workspace backend setup, operation, delegation, and hooks. |
+| `codex-flows-remote-backend` | synced from `../codex-flows` | Remote backend setup and operation without local hooks. |
+| `codex-flows-remote-control` | synced from `../codex-flows` | Local Codex App control of a remote backend over SSH/Tailscale. |
+| `patch-moi` | Git source `peezy-tech/patch.moi` | Patch stack maintenance skills and MCP runtime. |
+| `jojo-development-flow` | local shared skill | jojo.build and release operations for peezy-tech repos. |
+
+`patch-moi` intentionally stays a Git-backed plugin entry instead of a copied
+bundle because its MCP server expects the product repo runtime, scripts, and
+workspace layout.
+
+## Sync From Product Repos
+
+Run this from the marketplace repo after changing product-owned plugin or skill
+definitions:
+
+```bash
+./scripts/sync-marketplace.sh
+```
+
+The script expects sibling checkouts:
+
+```text
+../codex-flows
+../patch.moi
+```
+
+It refreshes `plugins/`, `.agents/plugins/marketplace.json`, and
+`sources.lock.json`.
 
 ## Layout
 
 ```text
+.agents/plugins/marketplace.json
+plugins/
+  codex-flows*/
+  jojo-development-flow/
 skills/
-  <skill-name>/
-    SKILL.md
-    agents/
-    references/
-    scripts/
-    assets/
+  jojo-development-flow/
+scripts/
+  sync-marketplace.sh
+sources.lock.json
 ```
-
-Only `SKILL.md` is required. The optional directories are used when a skill
-needs agent metadata, supporting reference material, executable helpers, or
-assets.
 
 ## Checks
 
-List the available skills:
-
 ```bash
-./scripts/list-skills.sh
+./scripts/sync-marketplace.sh
+python3 /home/peezy/.codex/skills/.system/plugin-creator/scripts/validate_plugin.py plugins/codex-flows
+for plugin in plugins/*; do python3 /home/peezy/.codex/skills/.system/plugin-creator/scripts/validate_plugin.py "$plugin"; done
+jq . .agents/plugins/marketplace.json >/dev/null
 ```
