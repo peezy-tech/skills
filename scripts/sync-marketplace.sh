@@ -6,6 +6,12 @@ WORKSPACE_ROOT="${WORKSPACE_ROOT:-$(cd "$MARKETPLACE_ROOT/.." && pwd)}"
 CODEX_FLOWS_ROOT="${CODEX_FLOWS_ROOT:-$WORKSPACE_ROOT/codex-flows}"
 PATCH_MOI_ROOT="${PATCH_MOI_ROOT:-$WORKSPACE_ROOT/patch.moi}"
 
+PUBLIC_CODEX_FLOW_PLUGINS=(
+  codex-flows-author
+  codex-flows-local-workspace
+  codex-flows-remote-control
+)
+
 require_dir() {
   local path="$1"
   if [[ ! -d "$path" ]]; then
@@ -35,168 +41,74 @@ git_status_short() {
   git -C "$repo" status --short
 }
 
+marketplace_entry() {
+  local plugin="$1"
+  cat <<JSON
+    {
+      "name": "$plugin",
+      "source": {
+        "source": "local",
+        "path": "./plugins/$plugin"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Coding"
+    }
+JSON
+}
+
+is_public_codex_flow_plugin() {
+  local candidate="$1"
+  local plugin
+  for plugin in "${PUBLIC_CODEX_FLOW_PLUGINS[@]}"; do
+    if [[ "$candidate" == "$plugin" ]]; then
+      return 0
+    fi
+  done
+  return 1
+}
+
 require_dir "$CODEX_FLOWS_ROOT"
 require_dir "$PATCH_MOI_ROOT"
-require_dir "$MARKETPLACE_ROOT/skills/jojo-development-flow"
 
 mkdir -p "$MARKETPLACE_ROOT/plugins" "$MARKETPLACE_ROOT/.agents/plugins"
 
-for plugin in \
-  codex-flows \
-  codex-flows-author \
-  codex-flows-backend-author \
-  codex-flows-local-workspace \
-  codex-flows-remote-backend \
-  codex-flows-remote-control \
-  jojo-development-flow
-do
-  rm -rf "$MARKETPLACE_ROOT/plugins/$plugin"
+for plugin_path in "$MARKETPLACE_ROOT"/plugins/*; do
+  [[ -d "$plugin_path" ]] || continue
+  plugin="$(basename "$plugin_path")"
+  if ! is_public_codex_flow_plugin "$plugin"; then
+    rm -rf "$plugin_path"
+  fi
 done
+rm -rf "$MARKETPLACE_ROOT/skills"
 
-mkdir -p "$MARKETPLACE_ROOT/plugins/codex-flows/.codex-plugin"
-sync_dir "$CODEX_FLOWS_ROOT/.codex-plugin" "$MARKETPLACE_ROOT/plugins/codex-flows/.codex-plugin"
-sync_dir "$CODEX_FLOWS_ROOT/skills" "$MARKETPLACE_ROOT/plugins/codex-flows/skills"
-sync_dir "$CODEX_FLOWS_ROOT/hooks" "$MARKETPLACE_ROOT/plugins/codex-flows/hooks"
-
-for plugin in \
-  codex-flows-author \
-  codex-flows-backend-author \
-  codex-flows-local-workspace \
-  codex-flows-remote-backend \
-  codex-flows-remote-control
-do
+for plugin in "${PUBLIC_CODEX_FLOW_PLUGINS[@]}"; do
+  require_dir "$CODEX_FLOWS_ROOT/plugins/$plugin"
   sync_dir "$CODEX_FLOWS_ROOT/plugins/$plugin" "$MARKETPLACE_ROOT/plugins/$plugin"
 done
 
-mkdir -p \
-  "$MARKETPLACE_ROOT/plugins/jojo-development-flow/.codex-plugin" \
-  "$MARKETPLACE_ROOT/plugins/jojo-development-flow/skills"
-sync_dir \
-  "$MARKETPLACE_ROOT/skills/jojo-development-flow" \
-  "$MARKETPLACE_ROOT/plugins/jojo-development-flow/skills/jojo-development-flow"
-cat >"$MARKETPLACE_ROOT/plugins/jojo-development-flow/.codex-plugin/plugin.json" <<'JSON'
 {
-  "name": "jojo-development-flow",
-  "version": "0.1.0",
-  "description": "jojo.build and release operations for peezy-tech repositories.",
-  "author": {
-    "name": "Peezy",
-    "email": "support@peezy.tech",
-    "url": "https://peezy.tech/"
-  },
-  "homepage": "https://github.com/peezy-tech/skills",
-  "repository": "https://github.com/peezy-tech/skills",
-  "license": "MIT",
-  "keywords": [
-    "codex",
-    "jojo",
-    "forgejo",
-    "release",
-    "skills"
-  ],
-  "skills": "./skills/",
-  "interface": {
-    "displayName": "jojo development flow",
-    "shortDescription": "Operate jojo.build remotes and Peezy release flows.",
-    "longDescription": "jojo-development-flow installs Codex guidance for peezy-tech development flow, jojo.build operations, Codeberg mirroring, branch tracking, release validation, and npm trusted publishing.",
-    "developerName": "Peezy",
-    "category": "Coding",
-    "capabilities": [
-      "Read",
-      "Write",
-      "Interactive"
-    ],
-    "websiteURL": "https://github.com/peezy-tech/skills",
-    "privacyPolicyURL": "https://peezy.tech/privacy",
-    "termsOfServiceURL": "https://peezy.tech/terms",
-    "defaultPrompt": [
-      "Check this repo's jojo.build remotes.",
-      "Prepare a Peezy release flow."
-    ],
-    "brandColor": "#2563EB"
-  }
-}
-JSON
-
-cat >"$MARKETPLACE_ROOT/.agents/plugins/marketplace.json" <<'JSON'
+  cat <<'JSON'
 {
   "name": "peezy-tech",
   "interface": {
     "displayName": "Peezy Tech"
   },
   "plugins": [
-    {
-      "name": "codex-flows",
-      "source": {
-        "source": "local",
-        "path": "./plugins/codex-flows"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL"
-      },
-      "category": "Coding"
-    },
-    {
-      "name": "codex-flows-author",
-      "source": {
-        "source": "local",
-        "path": "./plugins/codex-flows-author"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL"
-      },
-      "category": "Coding"
-    },
-    {
-      "name": "codex-flows-backend-author",
-      "source": {
-        "source": "local",
-        "path": "./plugins/codex-flows-backend-author"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL"
-      },
-      "category": "Coding"
-    },
-    {
-      "name": "codex-flows-local-workspace",
-      "source": {
-        "source": "local",
-        "path": "./plugins/codex-flows-local-workspace"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL"
-      },
-      "category": "Coding"
-    },
-    {
-      "name": "codex-flows-remote-backend",
-      "source": {
-        "source": "local",
-        "path": "./plugins/codex-flows-remote-backend"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL"
-      },
-      "category": "Coding"
-    },
-    {
-      "name": "codex-flows-remote-control",
-      "source": {
-        "source": "local",
-        "path": "./plugins/codex-flows-remote-control"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL"
-      },
-      "category": "Coding"
-    },
+JSON
+  local_first=true
+  for plugin in "${PUBLIC_CODEX_FLOW_PLUGINS[@]}"; do
+    if [[ "$local_first" == true ]]; then
+      local_first=false
+    else
+      printf ',\n'
+    fi
+    marketplace_entry "$plugin"
+  done
+  cat <<'JSON'
+,
     {
       "name": "patch-moi",
       "source": {
@@ -209,22 +121,11 @@ cat >"$MARKETPLACE_ROOT/.agents/plugins/marketplace.json" <<'JSON'
         "authentication": "ON_INSTALL"
       },
       "category": "Coding"
-    },
-    {
-      "name": "jojo-development-flow",
-      "source": {
-        "source": "local",
-        "path": "./plugins/jojo-development-flow"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL"
-      },
-      "category": "Coding"
     }
   ]
 }
 JSON
+} >"$MARKETPLACE_ROOT/.agents/plugins/marketplace.json"
 
 cat >"$MARKETPLACE_ROOT/sources.lock.json" <<JSON
 {
