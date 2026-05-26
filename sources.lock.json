@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-05-26T15:08:10Z",
+  "generatedAt": "2026-05-26T15:56:32Z",
   "sources": {
     "codex-flows": {
       "path": "/home/peezy/meta-workspace/codex-flows",
-      "revision": "cfd28236f67444887817472979511987e3f54a29",
+      "revision": "8be3d831d240bf1fed0ec376a371fd09b6a827c3",
       "dirty": false
     },
     "patch-moi": {
