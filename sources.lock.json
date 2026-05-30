@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-30T04:36:07Z",
+  "generatedAt": "2026-05-30T05:22:36Z",
   "sources": {
     "codex-flows": {
       "path": "/home/peezy/repos/codex-flows",
@@ -9,7 +9,7 @@
     },
     "codex-toys": {
       "path": "/home/peezy/repos/codex-toys",
-      "revision": "5f3600dffe717da962d6228c65cdc64a69ad3c3a",
+      "revision": "1da46bcba1cc18b988de715a81fe9fe940931af3",
       "dirty": false
     },
     "patch-moi": {
