@@ -5,10 +5,10 @@
   },
   "plugins": [
     {
-      "name": "codex-flows-author",
+      "name": "codex-toys-author",
       "source": {
         "source": "local",
-        "path": "./plugins/codex-flows-author"
+        "path": "./plugins/codex-toys-author"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -18,10 +18,10 @@
     }
 ,
     {
-      "name": "codex-flows-local-workspace",
+      "name": "codex-toys-local-workspace",
       "source": {
         "source": "local",
-        "path": "./plugins/codex-flows-local-workspace"
+        "path": "./plugins/codex-toys-local-workspace"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -31,10 +31,10 @@
     }
 ,
     {
-      "name": "codex-flows-remote-control",
+      "name": "codex-toys-remote-control",
       "source": {
         "source": "local",
-        "path": "./plugins/codex-flows-remote-control"
+        "path": "./plugins/codex-toys-remote-control"
       },
       "policy": {
         "installation": "AVAILABLE",

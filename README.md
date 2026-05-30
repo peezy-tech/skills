@@ -17,9 +17,9 @@ codex plugin marketplace add peezy-tech/skills --ref main
 Then install the plugin for the job:
 
 ```bash
-codex plugin add codex-flows-author@peezy-tech
-codex plugin add codex-flows-remote-control@peezy-tech
-codex plugin add codex-flows-local-workspace@peezy-tech
+codex plugin add codex-toys-author@peezy-tech
+codex plugin add codex-toys-remote-control@peezy-tech
+codex plugin add codex-toys-local-workspace@peezy-tech
 codex plugin add patch-moi@peezy-tech
 ```
 
@@ -27,9 +27,9 @@ codex plugin add patch-moi@peezy-tech
 
 | Plugin | Source | Purpose |
 | --- | --- | --- |
-| `codex-flows-author` | synced from `../codex-flows` | Turn automation authoring guidance. |
-| `codex-flows-local-workspace` | synced from `../codex-flows` | Local workspace backend setup and plugin-bundled hooks. |
-| `codex-flows-remote-control` | synced from `../codex-flows` | Local Codex App control of a remote backend over SSH/Tailscale. |
+| `codex-toys-author` | synced from `../codex-toys` | Turn automation authoring guidance. |
+| `codex-toys-local-workspace` | synced from `../codex-toys` | Local workspace toybox setup and plugin-bundled hooks. |
+| `codex-toys-remote-control` | synced from `../codex-toys` | Local Codex App control of remote workspaces over SSH/Tailscale. |
 | `patch-moi` | Git source `peezy-tech/patch.moi` | Patch stack maintenance skills and MCP runtime. |
 
 `patch-moi` intentionally stays a Git-backed plugin entry instead of a copied
@@ -48,7 +48,7 @@ definitions:
 The script expects sibling checkouts:
 
 ```text
-../codex-flows
+../codex-toys
 ../patch.moi
 ```
 
@@ -60,9 +60,9 @@ It refreshes `plugins/`, `.agents/plugins/marketplace.json`, and
 ```text
 .agents/plugins/marketplace.json
 plugins/
-  codex-flows-author/
-  codex-flows-local-workspace/
-  codex-flows-remote-control/
+  codex-toys-author/
+  codex-toys-local-workspace/
+  codex-toys-remote-control/
 scripts/
   sync-marketplace.sh
 sources.lock.json

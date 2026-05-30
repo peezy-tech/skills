@@ -1,15 +1,21 @@
 {
-  "generatedAt": "2026-05-29T17:57:45Z",
+  "generatedAt": "2026-05-30T04:23:16Z",
   "sources": {
     "codex-flows": {
       "path": "/home/peezy/repos/codex-flows",
-      "revision": "20843491b9584f5f82c6e33bc8a05d0ef862634e",
+      "revision": "",
+      "dirty": false,
+      "available": false
+    },
+    "codex-toys": {
+      "path": "/home/peezy/repos/codex-toys",
+      "revision": "61f4d509d7219d574537cfbd8e7631e033293820",
       "dirty": false
     },
     "patch-moi": {
-      "path": "/home/peezy/meta-workspace/patch.moi",
-      "revision": "681ea4be3077035e663c9da4448adb3b0fe4cc39",
-      "dirty": false,
+      "path": "/home/peezy/repos/patch.moi",
+      "revision": "dab995f12c8f032b30af577480f7f17eeb5bd310",
+      "dirty": true,
       "marketplaceSource": "https://github.com/peezy-tech/patch.moi.git"
     }
   }
