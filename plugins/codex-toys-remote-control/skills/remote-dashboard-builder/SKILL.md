@@ -1,6 +1,6 @@
 ---
 name: remote-dashboard-builder
-description: Use when building local Vite dashboards that inspect or operate remote Codex workspaces over SSH through codex-toys functions, without exposing remote HTTP ports.
+description: Use when building local Vite dashboards that inspect or operate remote Codex workbenches over SSH through codex-toys functions, without exposing remote HTTP ports.
 ---
 
 # Remote Dashboard Builder
@@ -13,9 +13,10 @@ workspace runs over SSH.
 
 - Build the dashboard as a local Vite app.
 - Do not start human-facing preview servers on the remote host.
-- Use `codex-toys/vite` as the local generic proxy bridge, or run
-  `codex-toys-proxy serve` directly for plain HTML.
-- Use `codex-toys/browser` fetch helpers from dashboard code.
+- Use `codex-toys/runtime` as the public dashboard bridge export, or run
+  `codex-toys runtime http` directly for plain HTML.
+- Use the `codexToys` browser helper from `codex-toys/runtime` in dashboard
+  code.
 - Use `.codex/functions.ts` in the remote workspace for active data or actions.
 - Keep remote `.codex/functions.ts` self-contained unless the remote workspace
   has its imported packages installed in local `node_modules`.
@@ -46,11 +47,11 @@ or production data.
 Use the Vite plugin in the local dashboard:
 
 ```ts
-import { codexToysRemote } from "codex-toys/vite";
+import { codexToysRuntime } from "codex-toys/runtime";
 
 export default {
   plugins: [
-    codexToysRemote({
+    codexToysRuntime({
       ssh: process.env.CODEX_TOYS_REMOTE_SSH_TARGET,
       cwd: process.env.CODEX_TOYS_REMOTE_CWD,
     }),
@@ -61,20 +62,20 @@ export default {
 Dashboard code calls the local bridge:
 
 ```ts
-import { codexToys } from "codex-toys/browser";
+import { codexToys } from "codex-toys/runtime";
 
 const functions = await codexToys.functions.list();
-const snapshot = await codexToys.functions.call("portfolioSnapshot");
+const snapshot = await codexToys.functions.call("statusSnapshot");
 ```
 
 The browser talks only to the local Vite server under `/__codex_toys/api`.
 The Vite plugin owns the SSH connection and forwards generic `/api/*` requests
-to the remote toybox.
+to the remote runtime.
 
-For plain HTML without Vite, serve a static directory through the proxy:
+For plain HTML without Vite, serve a static directory through the HTTP runtime:
 
 ```bash
-codex-toys-proxy serve --ssh <target> --cwd <remote-workspace> --static ./dashboard
+codex-toys runtime http --ssh <target> --cwd <remote-workspace> --static ./dashboard
 ```
 
 Plain JavaScript can call:
@@ -96,11 +97,11 @@ with no imports:
 
 ```ts
 export default {
-  portfolioSnapshot: {
-    description: "Read the latest portfolio snapshot.",
+  statusSnapshot: {
+    description: "Read the latest workbench status snapshot.",
     sideEffects: "read-only",
     handler: async () => {
-      return { positions: [], cash: 0 };
+      return { status: "ok", updatedAt: new Date().toISOString() };
     },
   },
 };
@@ -113,7 +114,7 @@ contents.
 
 If the remote workspace installs `codex-toys` locally, TypeScript
 authors may optionally import `defineFunctions` from
-`codex-toys/functions` for type-oriented editor help. Do not use
+`@codex-toys/workbench` for type-oriented editor help. Do not use
 bare imports in `.codex/functions.ts` unless the remote workspace can resolve
 those packages locally.
 

@@ -28,7 +28,7 @@ codex plugin add patch-moi@peezy-tech
 | Plugin | Source | Purpose |
 | --- | --- | --- |
 | `codex-toys-author` | synced from `../codex-toys` | Turn automation authoring guidance. |
-| `codex-toys-local-workspace` | synced from `../codex-toys` | Local workspace toybox setup and plugin-bundled hooks. |
+| `codex-toys-local-workspace` | synced from `../codex-toys` | Local workspace runtime operation guidance. |
 | `codex-toys-remote-control` | synced from `../codex-toys` | Local Codex App control of remote workspaces over SSH/Tailscale. |
 | `patch-moi` | Git source `peezy-tech/patch.moi` | Patch stack maintenance skills and MCP runtime. |
 
